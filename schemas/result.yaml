@@ -1,0 +1,16 @@
+type: Result
+description: What actually happened with the plan next to it.
+dir: ideas
+scopes: [project]
+path: "{seq}-{slug}/result"
+fields: {}
+body: |
+  # Status
+
+  Not started.
+
+  # Done
+
+  # Deviations from plan
+
+  # Follow-ups

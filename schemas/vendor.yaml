@@ -1,0 +1,10 @@
+type: Vendor
+description: Companies and projects that make the products I use.
+dir: vendors
+path: "{slug}"
+fields:
+  kind: { type: enum, values: [company, open-source, community, other] }
+body: |
+  # About
+
+  # Notes

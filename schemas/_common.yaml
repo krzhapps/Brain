@@ -1,0 +1,16 @@
+# Fields shared by every concept in brain/. Type schemas add to these.
+# Field types: string, date, datetime, url, enum, ref, list, bool, int,
+# actor, generated, verified, sources (the last three are OKF §5 structures).
+fields:
+  type:        { type: string, required: true }
+  title:       { type: string, required: true }
+  description: { type: string, required: true }
+  tags:        { type: list, of: string }
+  aliases:     { type: list, of: string }
+  status:      { type: enum, values: [draft, stable, deprecated] }
+  generated:   { type: generated, required: true }
+  verified:    { type: verified }
+  sources:     { type: sources }
+  usage_window: { type: string }
+  stale_after: { type: datetime }
+  resource:    { type: url }

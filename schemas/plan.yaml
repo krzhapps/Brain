@@ -1,0 +1,14 @@
+type: Plan
+description: What we're going to do about the idea next to it.
+dir: ideas
+scopes: [project]
+path: "{seq}-{slug}/plan"
+fields: {}
+body: |
+  # Goal
+
+  # Steps
+
+  # Decisions
+
+  # Open questions

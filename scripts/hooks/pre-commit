@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Installed with: git config core.hooksPath scripts/hooks
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+if [ -n "$staged" ]; then
+  # shellcheck disable=SC2086
+  python3 scripts/redaction.py $staged || {
+    echo "pre-commit: possible secrets in staged files (see above). Remove them or commit with --no-verify." >&2
+    exit 1
+  }
+fi
+
+uv run --quiet scripts/lint.py --quiet || {
+  echo "pre-commit: lint failed. Run 'uv run scripts/lint.py --fix' and fix the remaining errors." >&2
+  exit 1
+}

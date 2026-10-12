@@ -1,0 +1,18 @@
+type: Project
+description: Things I work on, from idea to done.
+dir: projects
+path: "{slug}/{slug}"   # folder note: projects/<slug>/<slug>.md
+fields:
+  phase:        { type: enum, values: [idea, active, paused, done, abandoned], required: true }
+  started:      { type: date }
+  ended:        { type: date }
+  people:       { type: list, of: ref, ref: Person }
+  organization: { type: ref, ref: Organization }
+  products:     { type: list, of: ref, ref: Product }
+  repo:         { type: url }
+body: |
+  # Goal
+
+  # Status
+
+  # Notes

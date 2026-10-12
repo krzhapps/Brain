@@ -1,0 +1,9 @@
+type: Idea
+description: Ideas, each in its own NNNNN-slug folder with a plan and a result.
+dir: ideas
+scopes: [project]
+path: "{seq}-{slug}/idea"
+fields:
+  phase: { type: enum, values: [proposed, planned, in-progress, done, dropped], required: true }
+body: |
+  # Idea

@@ -1,0 +1,19 @@
+type: Meeting
+description: Meetings I attend, grouped by year.
+dir: meetings
+scopes: [root, project]   # brain/meetings/ or brain/projects/<p>/meetings/
+path: "{date:%Y}/{date:%Y-%m-%d}-{slug}"
+fields:
+  date:      { type: datetime, required: true }
+  attendees: { type: list, of: ref, ref: Person, required: true, min: 1 }
+  projects:  { type: list, of: ref, ref: Project }   # other projects; the owner is implied by the path
+  medium:    { type: enum, values: [in-person, video, call, chat] }
+  series:    { type: string }
+body: |
+  # Agenda
+
+  # Notes
+
+  # Decisions
+
+  # Action items

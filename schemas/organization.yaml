@@ -1,0 +1,11 @@
+type: Organization
+description: Organizations I work and collaborate with.
+dir: organizations
+path: "{slug}"
+fields:
+  kind:         { type: enum, values: [company, community, school, government, other] }
+  relationship: { type: enum, values: [employer, client, partner, community, other] }
+body: |
+  # About
+
+  # Notes

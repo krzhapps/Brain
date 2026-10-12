@@ -1,0 +1,13 @@
+{
+  "useMarkdownLinks": true,
+  "newLinkFormat": "relative",
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "brain",
+  "attachmentFolderPath": "resources/attachments",
+  "propertiesInDocument": "visible",
+  "userIgnoreFilters": [
+    "scripts/",
+    "schemas/"
+  ]
+}

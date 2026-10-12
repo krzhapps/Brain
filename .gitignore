@@ -1,0 +1,15 @@
+# Obsidian: keep shared settings, ignore per-device state
+.obsidian/*
+!.obsidian/app.json
+!.obsidian/templates.json
+.trash/
+
+# Claude Code: per-user settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+.venv/
+
+.DS_Store
+brain/.obsidian/

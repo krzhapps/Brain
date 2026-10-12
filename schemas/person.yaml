@@ -1,0 +1,15 @@
+type: Person
+description: People I know, work with, or meet.
+dir: people
+path: "{slug}"
+fields:
+  organizations: { type: list, of: ref, ref: Organization }
+  role:          { type: string }
+  relationship:  { type: enum, values: [self, family, friend, colleague, client, acquaintance] }
+  email:         { type: string }
+  location:      { type: string }
+  last_contact:  { type: date }
+body: |
+  # About
+
+  # Notes

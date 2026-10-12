@@ -1,0 +1,16 @@
+type: Product
+description: Products and services I use.
+dir: products
+path: "{slug}"
+fields:
+  vendor:   { type: ref, ref: Vendor }
+  category: { type: enum, values: [software, hardware, service, other] }
+  usage:    { type: enum, values: [active, trial, past] }
+  since:    { type: date }
+  projects: { type: list, of: ref, ref: Project }
+body: |
+  # What it is
+
+  # How I use it
+
+  # Notes
