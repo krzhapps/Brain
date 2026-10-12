@@ -118,12 +118,12 @@ class Schemas:
 
 
 def load_schemas() -> Schemas:
-    common = yaml.safe_load((SCHEMAS / "_common.yaml").read_text())["fields"]
+    common = yaml.safe_load((SCHEMAS / "_common.yaml").read_text(encoding="utf-8"))["fields"]
     schemas = Schemas(common=common)
     for f in sorted(SCHEMAS.glob("*.yaml")):
         if f.name.startswith("_"):
             continue
-        d = yaml.safe_load(f.read_text())
+        d = yaml.safe_load(f.read_text(encoding="utf-8"))
         schemas.by_type[d["type"]] = Schema(
             type=d["type"], dir=d["dir"], path=d.get("path", "{slug}"),
             description=d.get("description", ""), fields=d.get("fields") or {},

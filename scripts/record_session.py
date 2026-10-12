@@ -192,7 +192,7 @@ def main() -> int:
         if len(sys.argv) > 1:
             transcript, last_message = Path(sys.argv[1]), None
         else:
-            payload = json.loads(sys.stdin.read() or "{}")
+            payload = json.loads(sys.stdin.buffer.read() or b"{}")  # bytes: UTF-8 regardless of locale
             transcript = Path(payload.get("transcript_path", ""))
             last_message = payload.get("last_assistant_message")
         if not transcript.is_file():

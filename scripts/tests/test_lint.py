@@ -77,11 +77,11 @@ class RepoTest(unittest.TestCase):
     """A throwaway repo with the real schemas, one person, one project, one meeting and one idea."""
 
     def setUp(self) -> None:
-        self.tmp = Path(tempfile.mkdtemp())
+        self.tmp = Path(tempfile.mkdtemp()).resolve()  # macOS: /var -> /private/var
         shutil.copytree(REPO / "schemas", self.tmp / "schemas")
         for d in ("people", "organizations", "vendors", "projects", "meetings/2026", "products"):
             (self.tmp / "brain" / d).mkdir(parents=True)
-        (self.tmp / "brain/log.md").write_text("# Log\n\n## 2026-10-07\n* **Initialization**: test.\n")
+        (self.tmp / "brain/log.md").write_text("# Log\n\n## 2026-10-07\n* **Initialization**: test.\n", encoding="utf-8")
         self.write("brain/people/me.md", ME)
         self.write(PROJECT_PATH, PROJECT)
         self.write("brain/meetings/2026/2026-10-07-kickoff.md", MEETING)
@@ -96,7 +96,7 @@ class RepoTest(unittest.TestCase):
     def write(self, rel: str, text: str) -> None:
         p = self.tmp / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(text)
+        p.write_text(text, encoding="utf-8")
 
     def messages(self, severity: str = "error", fix: bool = True) -> list[str]:
         report = lint.lint(fix)
@@ -118,15 +118,15 @@ class LintTest(RepoTest):
 
     def test_fix_writes_related_block_and_indexes(self) -> None:
         self.messages()
-        meeting = (self.tmp / "brain/meetings/2026/2026-10-07-kickoff.md").read_text()
+        meeting = (self.tmp / "brain/meetings/2026/2026-10-07-kickoff.md").read_text(encoding="utf-8")
         self.assertIn("- Attendees: [Me](../../people/me.md)", meeting)
         self.assertIn("- Projects: [Website](../../projects/website/website.md)", meeting)
         self.assertTrue(meeting.startswith("---\ntype: Meeting\n"), "frontmatter must be preserved")
-        root = (self.tmp / "brain/index.md").read_text()
+        root = (self.tmp / "brain/index.md").read_text(encoding="utf-8")
         self.assertIn('okf_version: "0.2"', root)
         self.assertIn("[People](people/index.md)", root)
         self.assertIn("[Kickoff](2026-10-07-kickoff.md) - First meeting.",
-                      (self.tmp / "brain/meetings/2026/index.md").read_text())
+                      (self.tmp / "brain/meetings/2026/index.md").read_text(encoding="utf-8"))
 
     def test_without_fix_generated_content_is_an_error(self) -> None:
         msgs = self.messages(fix=False)
@@ -236,17 +236,17 @@ class LintTest(RepoTest):
                    MEETING.replace("projects: [projects/website/website]\n", ""))
         self.assertEqual(self.messages(), [])
         self.assertEqual(self.messages("warning"), [])
-        meeting = (self.tmp / "brain/projects/website/meetings/2026/2026-10-07-kickoff.md").read_text()
+        meeting = (self.tmp / "brain/projects/website/meetings/2026/2026-10-07-kickoff.md").read_text(encoding="utf-8")
         self.assertIn("- Project: [Website](../../website.md)", meeting)
-        self.assertIn("* [Website](website.md)", (self.tmp / "brain/projects/website/index.md").read_text())
-        self.assertIn("* [Website](website/index.md) - The brain.", (self.tmp / "brain/projects/index.md").read_text())
+        self.assertIn("* [Website](website.md)", (self.tmp / "brain/projects/website/index.md").read_text(encoding="utf-8"))
+        self.assertIn("* [Website](website/index.md) - The brain.", (self.tmp / "brain/projects/index.md").read_text(encoding="utf-8"))
 
     def test_project_lists_its_ideas_and_counts_ideas_only(self) -> None:
         self.messages()
-        project = (self.tmp / PROJECT_PATH).read_text()
+        project = (self.tmp / PROJECT_PATH).read_text(encoding="utf-8")
         self.assertIn("- Ideas: [X](ideas/00000-x/idea.md)", project)
-        self.assertIn("* [Ideas](ideas/index.md) - 1 idea", (self.tmp / "brain/projects/website/index.md").read_text())
-        self.assertIn("* [2026](2026/index.md) - 1 meeting", (self.tmp / "brain/meetings/index.md").read_text())
+        self.assertIn("* [Ideas](ideas/index.md) - 1 idea", (self.tmp / "brain/projects/website/index.md").read_text(encoding="utf-8"))
+        self.assertIn("* [2026](2026/index.md) - 1 meeting", (self.tmp / "brain/meetings/index.md").read_text(encoding="utf-8"))
 
     def test_meeting_repeating_owner_warns(self) -> None:
         self.write("brain/projects/website/meetings/2026/2026-10-08-sync.md",
@@ -310,7 +310,7 @@ class ScriptTest(RepoTest):
     def test_new_idea_without_project_creates_one(self) -> None:
         d = self.new("idea", "Better search")
         self.assertEqual(d, self.tmp / "brain/projects/better-search/ideas/00001-better-search")
-        project = (self.tmp / "brain/projects/better-search/better-search.md").read_text()
+        project = (self.tmp / "brain/projects/better-search/better-search.md").read_text(encoding="utf-8")
         self.assertIn("phase: idea", project)
         self.assertEqual(self.messages(), [])
 
@@ -324,9 +324,9 @@ class ScriptTest(RepoTest):
         self.write("brain/people/me.md", ME + "\nWorks on [Website](../projects/website/website.md).\n")
         self.mv("brain/projects/website", "brain/projects/brain")
         self.mv("brain/projects/brain/website.md", "brain/projects/brain/brain.md")
-        meeting = (self.tmp / "brain/meetings/2026/2026-10-07-kickoff.md").read_text()
+        meeting = (self.tmp / "brain/meetings/2026/2026-10-07-kickoff.md").read_text(encoding="utf-8")
         self.assertIn("projects: [projects/brain/brain]", meeting)
-        self.assertIn("[Website](../projects/brain/brain.md)", (self.tmp / "brain/people/me.md").read_text())
+        self.assertIn("[Website](../projects/brain/brain.md)", (self.tmp / "brain/people/me.md").read_text(encoding="utf-8"))
         self.assertEqual(self.messages(), [])
 
 
